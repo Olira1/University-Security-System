@@ -4,140 +4,23 @@
 
 Build a frontend-only React application with two portals (Police and Admin) for campus access management, featuring QR scanning, face verification simulation, visitor management, vehicle logging, and real-time alerts. All API calls will be mocked for Day 1 demo.
 
-## Work Division: Dev-A & Dev-B
+## Implementation Order
 
-This project is being developed by two developers collaborating on GitHub. Each developer is responsible for complete implementation (UI + Logic/Context) of their assigned pages and components.
+This project will be implemented by a single developer following a logical sequence. Start with foundational services and components, then build pages that depend on them.
 
-### Dev-A Responsibilities
+### Recommended Implementation Sequence
 
-**Pages:**
+**Phase 1: Foundation (Start Here)**
 
-1. **Police Portal** (`/police`)
+1. Mock Services & Constants - Create all mock services and constants first
+2. Common Components - Build reusable components needed by multiple pages
+3. Context Providers - Set up state management
 
-   - `src/pages/police/PoliceDashboard.jsx` - Complete implementation
-   - All UI, state management, API integration, WebSocket connection
+**Phase 2: Core Features** 4. Routing Setup - Configure routes and protected routes 5. Authentication - Login page and AuthContext 6. Police Portal - Independent portal for scanning and alerts
 
-2. **Admin Login** (`/admin/login`)
+**Phase 3: Admin Portal** 7. Admin Dashboard - Overview page with metrics 8. Admin Live Scan - Face recognition and QR scanning 9. Admin Visitor Management - Visitor pass creation 10. Admin Scan Logs - Violation history and filtering 11. Admin Alerts - Security alerts monitoring
 
-   - `src/pages/admin/Login.jsx` - Complete implementation
-   - UI, form handling, authentication logic
-
-3. **Admin Dashboard** (`/admin/dashboard`)
-
-   - `src/pages/admin/Dashboard.jsx` - Complete implementation
-   - UI, metrics display, recent scans table, quick actions
-
-4. **Admin Live Scan** (`/admin/livescan`)
-   - `src/pages/admin/LiveScan.jsx` - Complete implementation
-   - UI, camera integration, QR scanning, face verification display
-
-**Components:**
-
-- `src/components/police/QRScanner.jsx` - Complete implementation
-- `src/components/police/CameraPreview.jsx` - Complete implementation
-- `src/components/police/AlertDisplay.jsx` - Complete implementation
-- `src/components/admin/QRScanner.jsx` - Complete implementation (for Live Scan page)
-- `src/components/admin/CameraPreview.jsx` - Complete implementation (for Live Scan page)
-- `src/components/auth/LoginForm.jsx` - Complete implementation
-
-**Context & Infrastructure:**
-
-- `src/context/AuthContext.jsx` - Complete implementation (JWT token management, login/logout)
-- `src/App.jsx` - Routing setup (all routes, protected routes for admin)
-
-**Responsibilities Summary:**
-
-- Police Portal: Full implementation (page + all components + logic)
-- Admin Login: Full implementation (page + component + AuthContext integration)
-- Admin Dashboard: Full implementation (page + UI + API calls)
-- Admin Live Scan: Full implementation (page + components + camera/QR logic)
-- Authentication: AuthContext and routing protection
-
----
-
-### Dev-B Responsibilities
-
-**Pages:**
-
-1. **Admin Visitor Management** (`/admin/visitor-management`)
-
-   - `src/pages/admin/VisitorManagement.jsx` - Complete implementation
-   - UI, form handling, visitor list, QR generation
-
-2. **Admin Scan Logs** (`/admin/scan-logs`)
-
-   - `src/pages/admin/ScanLogs.jsx` - Complete implementation
-   - UI, filtering, pagination, table display
-
-3. **Admin Alerts** (`/admin/alerts`)
-   - `src/pages/admin/Alerts.jsx` - Complete implementation
-   - UI, violation cards, real-time updates, acknowledge/investigate actions
-
-**Components:**
-
-- `src/components/common/Sidebar.jsx` - Complete implementation (used by all admin pages)
-- `src/components/common/Header.jsx` - Complete implementation (used by all admin pages)
-- `src/components/common/MetricCard.jsx` - Complete implementation (used by Dashboard)
-- `src/components/common/StatusBadge.jsx` - Complete implementation (used across admin pages)
-- `src/components/admin/VisitorForm.jsx` - Complete implementation
-- `src/components/admin/QRCodeDisplay.jsx` - Complete implementation
-- `src/components/admin/FilterBar.jsx` - Complete implementation
-- `src/components/admin/LogsTable.jsx` - Complete implementation
-- `src/components/admin/AlertCard.jsx` - Complete implementation
-
-**Context & Infrastructure:**
-
-- `src/context/AlertContext.jsx` - Complete implementation (violation state, WebSocket integration)
-- `src/services/apiMock.js` - Complete implementation (all API endpoints)
-- `src/services/faceMatchMock.js` - Complete implementation (face verification simulation)
-- `src/services/qrGenerator.js` - Complete implementation (QR code generation)
-- `src/services/wsMock.js` - Complete implementation (WebSocket simulation)
-- `src/utils/mockData.js` - Complete implementation (all sample data)
-- `src/utils/constants.js` - Complete implementation (all constants)
-
-**Responsibilities Summary:**
-
-- Admin Visitor Management: Full implementation (page + components + API integration)
-- Admin Scan Logs: Full implementation (page + components + filtering/pagination)
-- Admin Alerts: Full implementation (page + components + WebSocket + violation management)
-- Common Components: All reusable components used across admin portal
-- Backend Simulation: All mock services, data, and constants
-- Alert System: AlertContext and WebSocket integration
-
----
-
-### Collaboration Points
-
-**Shared Dependencies:**
-
-- Dev-A's pages will use Dev-B's common components (Sidebar, Header, MetricCard, StatusBadge)
-- Dev-A's AuthContext will be used by Dev-B's pages for authentication checks
-- Dev-B's AlertContext will be used by Dev-A's Police Portal for real-time alerts
-- Dev-B's mock services will be used by Dev-A's pages for API calls
-- Dev-B's constants will be used by both developers
-
-**Git Workflow:**
-
-1. Dev-B should create mock services and constants first (foundation)
-2. Dev-A can start with Police Portal (independent) and Admin Login
-3. Dev-B creates common components early (needed by Dev-A's Dashboard)
-4. Both developers work in parallel on their assigned pages
-5. Regular commits and pulls to sync shared dependencies
-
-**Integration Checklist:**
-
-- [ ] Dev-B: Create `constants.js` and `mockData.js` first
-- [ ] Dev-B: Create `apiMock.js` with all endpoints
-- [ ] Dev-B: Create common components (Sidebar, Header, MetricCard, StatusBadge)
-- [ ] Dev-A: Create `AuthContext.jsx` for authentication
-- [ ] Dev-B: Create `AlertContext.jsx` and `wsMock.js` for alerts
-- [ ] Dev-A: Implement Police Portal (can work independently)
-- [ ] Dev-A: Implement Admin Login (uses AuthContext)
-- [ ] Dev-A: Implement Admin Dashboard (uses Dev-B's common components)
-- [ ] Dev-A: Implement Admin Live Scan (uses Dev-B's mock services)
-- [ ] Dev-B: Implement Admin Visitor Management (uses Dev-B's mock services)
-- [ ] Dev-B: Implement Admin Scan Logs (uses Dev-B's mock services)
-- [ ] Dev-B: Implement Admin Alerts (uses AlertContext and mock services)
+**Phase 4: Polish** 12. Styling & Polish - Apply consistent styling across all pages 13. Testing & Demo Prep - End-to-end testing and demo preparation
 
 ---
 
@@ -534,191 +417,243 @@ All endpoints follow the API contract structure with `{ status: "success"|"error
 
 ## Task Breakdown
 
-### 1. Setup & Routing (Foundation) - **Dev-A**
+### 1. Mock Services (Backend Simulation) - **START HERE**
 
-- Install dependencies
-- Set up React Router with portal routes in `App.jsx`
-- Note: Basic layout components (Sidebar, Header) will be created by Dev-B
+**Priority: Foundation - Build this first as all other features depend on it**
 
-### 2. Mock Services (Backend Simulation) - **Dev-B**
-
+- Create `constants.js` with all violation types, subject types, severity levels, gate IDs, API URLs
+- Create `mockData.js` with sample data matching API schemas (subjects, violations, gates, employees)
 - Implement `apiMock.js` matching API contract endpoints:
   - Authentication: `POST /api/v1/auth/login`, `GET /api/v1/auth/me`
   - Gate scanning: `POST /api/v1/scan/qr`, `POST /api/v1/face/verify`
   - Dashboard: `GET /api/v1/violations`, `POST /api/v1/visitors/passes`
   - All responses follow `{ status: "success"|"error", data: {...} }` format
 - Implement `faceMatchMock.js` with simulation logic matching API contract
-- Create `mockData.js` with sample data matching API schemas (subjects, violations, gates, employees)
 - Implement `qrGenerator.js` for QR code creation (content string and base64 image)
 - Implement `wsMock.js` for WebSocket simulation (`/ws/alerts` endpoint)
-- Create `constants.js` with all violation types, subject types, severity levels, gate IDs, API URLs
+
+### 2. Common Components - **Build Early**
+
+**Priority: High - Needed by multiple admin pages**
+
+- Implement `Sidebar.jsx` - Reusable sidebar navigation (used by all admin pages)
+- Implement `Header.jsx` - Top header with user profile (used by all admin pages)
+- Implement `MetricCard.jsx` - Dashboard metric cards (used by Dashboard)
+- Implement `StatusBadge.jsx` - Status badges (used across admin pages)
 
 ### 3. Context Providers (State Management)
 
-- **Dev-A**: Create `AuthContext` for mock authentication with JWT token management
+- Create `AuthContext` for mock authentication with JWT token management
   - Handles login with `employeeId` and `password`
   - Stores JWT token and user info
   - Manages token expiration
   - Sets Authorization header for API calls
-- **Dev-B**: Create `AlertContext` for violation/alert management
+- Create `AlertContext` for violation/alert management
   - Connects to WebSocket for real-time violations
   - Stores violations matching API contract format
   - Handles violation types and severity levels
   - Methods for acknowledging/resolving violations
 
-### 4. Police Portal (Alert-Focused) - **Dev-A**
+### 4. Setup & Routing (Foundation)
 
-- Build `PoliceDashboard` with scanning interface
-- Implement `QRScanner` component calling `POST /api/v1/scan/qr` (uses Dev-B's apiMock)
-  - Handle valid QR responses and violation responses (`unauthorized_qr_scan`, `expired_visitor_qr_code`)
-- Implement `CameraPreview` with face match simulation
-  - Capture face image, convert to base64
-  - Call `POST /api/v1/face/verify` with subject info (uses Dev-B's apiMock)
-  - Handle verification responses and violations (`face_verification_mismatch`, `multiple_fail_attempt`)
-- Implement `AlertDisplay` for full-screen alerts showing violation details
-  - Display violation type, severity, gate info, subject info (if available), timestamp
-  - Uses Dev-B's AlertContext for violation state
-- Add white screen state for successful QR scan + face verification
-- Connect to WebSocket for real-time violation alerts (uses Dev-B's wsMock)
+- Install dependencies (`react-router-dom`, `react-qr-reader`, `react-webcam`, `qrcode.react`)
+- Set up React Router with portal routes in `App.jsx`
+- Configure routes: `/police` for Police Portal, `/admin/*` for Admin Portal
+- Default route redirects to `/police`
+- Set up protected routes for admin (using AuthContext)
 
-### 5. Admin Portal - Auth (Login) - **Dev-A**
+### 5. Admin Portal - Auth (Login)
 
 - Build `Login` page with `employeeId` and `password` fields (matching API contract)
 - Implement `LoginForm` component
-- Integrate with `AuthContext` (Dev-A's own context) to call `POST /api/v1/auth/login` (uses Dev-B's apiMock)
+- Integrate with `AuthContext` to call `POST /api/v1/auth/login`
 - Handle error responses: `INVALID_CREDENTIALS`, `ACCOUNT_LOCKED`
 - Store JWT token and user info on success
 - Redirect to `/admin/dashboard` on successful login
 
-### 6. Admin Portal - Dashboard (Overview) - **Dev-A**
+### 6. Police Portal (Alert-Focused)
+
+- Build `PoliceDashboard` with scanning interface
+- Implement `QRScanner` component calling `POST /api/v1/scan/qr`
+  - Handle valid QR responses and violation responses (`unauthorized_qr_scan`, `expired_visitor_qr_code`)
+- Implement `CameraPreview` with face match simulation
+  - Capture face image, convert to base64
+  - Call `POST /api/v1/face/verify` with subject info
+  - Handle verification responses and violations (`face_verification_mismatch`, `multiple_fail_attempt`)
+- Implement `AlertDisplay` for full-screen alerts showing violation details
+  - Display violation type, severity, gate info, subject info (if available), timestamp
+  - Uses AlertContext for violation state
+- Add white screen state for successful QR scan + face verification
+- Connect to WebSocket for real-time violation alerts
+
+### 7. Admin Portal - Dashboard (Overview)
 
 - Build `Dashboard` page with metrics
-- Use Dev-B's `MetricCard` component (common component)
-- Use Dev-B's `Sidebar` and `Header` components (common components)
+- Use `MetricCard` component (common component)
+- Use `Sidebar` and `Header` components (common components)
 - Create Recent Live Scans table
 - Add Quick Actions section
-- Integrate with Dev-B's apiMock for dashboard stats
+- Integrate with apiMock for dashboard stats
 
-### 7. Admin Portal - Live Scan (Face Recognition) - **Dev-A**
+### 8. Admin Portal - Live Scan (Face Recognition)
 
 - Build `LiveScan` page
 - Implement admin `QRScanner` and `CameraPreview` components
-- Use Dev-B's `Sidebar` and `Header` components (common components)
+- Use `Sidebar` and `Header` components (common components)
 - Integrate camera preview and QR scanner
 - Display student/visitor info card with QR
-- Integrate with Dev-B's apiMock for QR scanning and face verification
+- Integrate with apiMock for QR scanning and face verification
 
-### 8. Admin Portal - Visitor Management (QR Creation) - **Dev-B**
+### 9. Admin Portal - Visitor Management (QR Creation)
 
 - Build `VisitorManagement` page
 - Implement `VisitorForm` component with all API contract fields:
   - Required: visitorName, purpose, hostEmployeeId, validFrom, validUntil
   - Optional: visitorEmail, visitorPhone, allowedGates, notes
 - Implement `QRCodeDisplay` component
-- Use Dev-B's own `Sidebar` and `Header` components (common components)
+- Use `Sidebar` and `Header` components (common components)
 - Add validation: validFrom validation, validUntil after validFrom, max 24h duration
-- Call `POST /api/v1/visitors/passes` on submit (uses Dev-B's own apiMock)
-- Display generated QR code using `imageBase64` from response (uses Dev-B's qrGenerator)
+- Call `POST /api/v1/visitors/passes` on submit
+- Display generated QR code using `imageBase64` from response
 - Create visitors table with search functionality
 - Implement View QR and Edit actions
 
-### 9. Admin Portal - Scan Logs (History) - **Dev-B**
+### 10. Admin Portal - Scan Logs (History)
 
 - Build `ScanLogs` page displaying violations from `GET /api/v1/violations`
 - Implement `FilterBar` component with filters:
   - Violation type, subject type, gate ID, date range (startDate/endDate), resolution status
 - Implement `LogsTable` component with columns matching violation schema:
   - Timestamp (occurredAt), Violation Type, Subject Type, Subject Name, Gate, Status (resolved)
-- Use Dev-B's own `Sidebar` and `Header` components (common components)
+- Use `Sidebar` and `Header` components (common components)
 - Handle `unauthorized_qr_scan` violations (subject: null) appropriately
 - Add pagination matching API contract pagination object
 - Add export functionality (mock)
-- Integrate with Dev-B's apiMock for violations data
+- Integrate with apiMock for violations data
 
-### 10. Admin Portal - Alerts (Security Monitoring) - **Dev-B**
+### 11. Admin Portal - Alerts (Security Monitoring)
 
 - Build `Alerts` page displaying violations from `GET /api/v1/violations`
 - Implement `AlertCard` component matching API contract violation format
-- Use Dev-B's own `Sidebar` and `Header` components (common components)
-- Use Dev-B's `StatusBadge` component for severity and status badges
+- Use `Sidebar` and `Header` components (common components)
+- Use `StatusBadge` component for severity and status badges
 - Display violation types: `unauthorized_qr_scan`, `face_verification_mismatch`, `multiple_fail_attempt`, `expired_visitor_qr_code`
 - Show severity badges: `low`, `medium`, `high`, `critical`
 - Show resolution status: `resolved: false` (New/Investigating), `resolved: true` (Acknowledged)
 - Handle `unauthorized_qr_scan` violations (subject: null) - show "Unknown Individual"
 - Add acknowledge (marks as resolved) and investigate (opens details modal) actions
-- Connect to WebSocket for real-time violation updates (uses Dev-B's own AlertContext and wsMock)
-- Integrate with Dev-B's apiMock for violations data
+- Connect to WebSocket for real-time violation updates
+- Integrate with apiMock for violations data
 
-### 11. Styling & Polish (UI/UX) - **Both Developers**
+### 12. Styling & Polish (UI/UX)
 
-- **Dev-A**: Apply Tailwind styling to Police Portal, Admin Login, Admin Dashboard, Admin Live Scan
-- **Dev-B**: Apply Tailwind styling to Admin Visitor Management, Admin Scan Logs, Admin Alerts, Common Components
-- Both developers: Add animations and transitions to their respective pages
-- Both developers: Ensure responsive design for their pages
-- Both developers: Add loading states and error handling
-- Coordinate to ensure consistent styling across the application
+- Apply Tailwind CSS styling to match provided images (purple accents, white backgrounds)
+- Add animations and transitions to all pages
+- Ensure responsive design for mobile/tablet
+- Add loading states and error handling
+- Ensure consistent styling across all portals
 
-### 12. Testing & Demo Prep (Finalization) - **Both Developers**
+### 13. Testing & Demo Prep (Finalization)
 
-- **Dev-A**: Test Police Portal flows, Admin Login, Admin Dashboard, Admin Live Scan
-- **Dev-B**: Test Admin Visitor Management, Admin Scan Logs, Admin Alerts
-- **Both**: Test integration between portals (alerts, authentication)
-- **Dev-B**: Verify mock data displays correctly across all pages
-- **Dev-A**: Ensure alerts trigger properly in Police Portal (using Dev-B's AlertContext)
-- **Dev-B**: Test visitor QR generation and scanning flow
-- **Both**: Prepare demo scenarios with sample data
-- **Both**: Cross-test each other's pages for integration issues
+- Test all flows end-to-end
+- Test Police Portal flows (QR scanning, face verification, alerts)
+- Test Admin Login and authentication
+- Test Admin Dashboard, Live Scan, Visitor Management, Scan Logs, Alerts
+- Test integration between portals (alerts, authentication)
+- Verify mock data displays correctly across all pages
+- Ensure alerts trigger properly in Police Portal
+- Test visitor QR generation and scanning flow
+- Prepare demo scenarios with sample data
+- Test error handling and edge cases
 
 ## Implementation Checklist
 
-### Dev-A Checklist
+### Phase 1: Foundation (Start Here)
 
-- [ ] Setup & Routing (App.jsx)
-- [ ] AuthContext (JWT token management)
-- [ ] Police Portal - PoliceDashboard page
-- [ ] Police Portal - QRScanner component
-- [ ] Police Portal - CameraPreview component
-- [ ] Police Portal - AlertDisplay component
-- [ ] Admin Portal - Login page + LoginForm component
-- [ ] Admin Portal - Dashboard page
-- [ ] Admin Portal - Live Scan page
-- [ ] Admin Portal - QRScanner component (for Live Scan)
-- [ ] Admin Portal - CameraPreview component (for Live Scan)
-- [ ] Styling & Polish (Dev-A's pages)
-- [ ] Testing (Dev-A's pages)
+- [ ] **Step 1**: Constants & Mock Data
+  - [ ] Create `constants.js` with all violation types, subject types, severity levels, gate IDs, API URLs
+  - [ ] Create `mockData.js` with sample data (students, staff, visitors, violations, gates, employees)
+- [ ] **Step 1**: Mock Services
+  - [ ] Implement `apiMock.js` with all API endpoints (auth, scan, violations, visitors)
+  - [ ] Implement `faceMatchMock.js` for face verification simulation
+  - [ ] Implement `qrGenerator.js` for QR code generation
+  - [ ] Implement `wsMock.js` for WebSocket simulation
+- [ ] **Step 2**: Common Components
+  - [ ] Implement `Sidebar.jsx` (used by all admin pages)
+  - [ ] Implement `Header.jsx` (used by all admin pages)
+  - [ ] Implement `MetricCard.jsx` (used by Dashboard)
+  - [ ] Implement `StatusBadge.jsx` (used across admin pages)
+- [ ] **Step 3**: Context Providers
+  - [ ] Create `AuthContext.jsx` (JWT token management, login/logout)
+  - [ ] Create `AlertContext.jsx` (violation state, WebSocket integration)
 
-### Dev-B Checklist
+### Phase 2: Core Features
 
-- [ ] Constants & Mock Data (constants.js, mockData.js)
-- [ ] Mock Services - apiMock.js (all endpoints)
-- [ ] Mock Services - faceMatchMock.js
-- [ ] Mock Services - qrGenerator.js
-- [ ] Mock Services - wsMock.js
-- [ ] AlertContext (violation state, WebSocket)
-- [ ] Common Components - Sidebar
-- [ ] Common Components - Header
-- [ ] Common Components - MetricCard
-- [ ] Common Components - StatusBadge
-- [ ] Admin Portal - Visitor Management page
-- [ ] Admin Portal - VisitorForm component
-- [ ] Admin Portal - QRCodeDisplay component
-- [ ] Admin Portal - Scan Logs page
-- [ ] Admin Portal - FilterBar component
-- [ ] Admin Portal - LogsTable component
-- [ ] Admin Portal - Alerts page
-- [ ] Admin Portal - AlertCard component
-- [ ] Styling & Polish (Dev-B's pages and components)
-- [ ] Testing (Dev-B's pages)
+- [ ] **Step 4**: Setup & Routing
+  - [ ] Install dependencies (react-router-dom, react-qr-reader, react-webcam, qrcode.react)
+  - [ ] Set up React Router in `App.jsx`
+  - [ ] Configure routes (`/police`, `/admin/*`)
+  - [ ] Set up protected routes for admin
+- [ ] **Step 5**: Admin Login
+  - [ ] Build `Login.jsx` page
+  - [ ] Implement `LoginForm.jsx` component
+  - [ ] Integrate with AuthContext
+  - [ ] Add error handling
+- [ ] **Step 6**: Police Portal
+  - [ ] Build `PoliceDashboard.jsx` page
+  - [ ] Implement `QRScanner.jsx` component (police)
+  - [ ] Implement `CameraPreview.jsx` component (police)
+  - [ ] Implement `AlertDisplay.jsx` component
+  - [ ] Add white screen state for successful matches
+  - [ ] Connect to WebSocket for real-time alerts
 
-### Integration Checklist (Both Developers)
+### Phase 3: Admin Portal
 
-- [ ] Verify Dev-A's pages use Dev-B's common components correctly
-- [ ] Verify Dev-A's pages use Dev-B's mock services correctly
-- [ ] Verify Dev-B's pages use Dev-A's AuthContext correctly
-- [ ] Verify Police Portal uses Dev-B's AlertContext correctly
-- [ ] Cross-test all flows end-to-end
-- [ ] Verify styling consistency across portals
-- [ ] Prepare demo scenarios
+- [ ] **Step 7**: Admin Dashboard
+  - [ ] Build `Dashboard.jsx` page
+  - [ ] Use common components (Sidebar, Header, MetricCard)
+  - [ ] Create Recent Live Scans table
+  - [ ] Add Quick Actions section
+- [ ] **Step 8**: Admin Live Scan
+  - [ ] Build `LiveScan.jsx` page
+  - [ ] Implement admin `QRScanner.jsx` component
+  - [ ] Implement admin `CameraPreview.jsx` component
+  - [ ] Display student/visitor info card
+- [ ] **Step 9**: Admin Visitor Management
+  - [ ] Build `VisitorManagement.jsx` page
+  - [ ] Implement `VisitorForm.jsx` component
+  - [ ] Implement `QRCodeDisplay.jsx` component
+  - [ ] Create visitors table with search
+  - [ ] Add View QR and Edit actions
+- [ ] **Step 10**: Admin Scan Logs
+  - [ ] Build `ScanLogs.jsx` page
+  - [ ] Implement `FilterBar.jsx` component
+  - [ ] Implement `LogsTable.jsx` component
+  - [ ] Add pagination
+  - [ ] Add export functionality
+- [ ] **Step 11**: Admin Alerts
+  - [ ] Build `Alerts.jsx` page
+  - [ ] Implement `AlertCard.jsx` component
+  - [ ] Display violations with severity badges
+  - [ ] Add acknowledge and investigate actions
+  - [ ] Connect to WebSocket for real-time updates
+
+### Phase 4: Polish
+
+- [ ] **Step 12**: Styling & Polish
+  - [ ] Apply Tailwind CSS styling to all pages
+  - [ ] Add animations and transitions
+  - [ ] Ensure responsive design
+  - [ ] Add loading states
+  - [ ] Add error handling UI
+- [ ] **Step 13**: Testing & Demo Prep
+  - [ ] Test all flows end-to-end
+  - [ ] Test Police Portal (QR scan, face verification, alerts)
+  - [ ] Test Admin Portal (all pages)
+  - [ ] Test authentication flow
+  - [ ] Test visitor QR generation and scanning
+  - [ ] Prepare demo scenarios
+  - [ ] Test error handling and edge cases
 
 ---
 
