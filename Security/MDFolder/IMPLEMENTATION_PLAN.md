@@ -128,9 +128,10 @@ All mock services and API calls must follow the API contract structure:
 **Status:** Pending
 
 **Description:**
-Install react-router-dom and set up routing structure with /police and /admin/* routes. Create basic layout components (Sidebar, Header).
+Install react-router-dom and set up routing structure with /police and /admin/\* routes. Create basic layout components (Sidebar, Header).
 
 **Details:**
+
 - Install `react-router-dom` for routing
 - Set up routes: `/police` for Police Portal, `/admin/*` for Admin Portal
 - Default route redirects to `/police`
@@ -153,10 +154,12 @@ Implement apiMock.js matching API contract: POST /api/v1/auth/login, GET /api/v1
 All endpoints follow the API contract structure with `{ status: "success"|"error", data: {...} }` format.
 
 **Authentication Endpoints:**
+
 - `POST /api/v1/auth/login(employeeId, password)`: Returns JWT token, expiresAt, and user object
 - `GET /api/v1/auth/me()`: Returns current authenticated user info (requires JWT token)
 
 **Gate Scanning Endpoints (Public - No Auth):**
+
 - `POST /api/v1/scan/qr(qrCode, gateId, scanTimestamp)`:
   - Returns `{ valid: boolean, subjectType: "student"|"staff"|"visitor", subject: {...}, accessGranted: boolean, requiresFaceVerification: boolean }`
   - Or violation response: `{ valid: false, violationType: "unauthorized_qr_scan"|"expired_visitor_qr_code", violationId: string, message: string }`
@@ -165,6 +168,7 @@ All endpoints follow the API contract structure with `{ status: "success"|"error
   - Or violation response: `{ verified: false, violationType: "face_verification_mismatch"|"multiple_fail_attempt", violationId: string, subject: {...} }`
 
 **Dashboard Endpoints (Auth Required):**
+
 - `GET /api/v1/violations(queryParams)`: Returns paginated violations list with filters
   - Query params: `page`, `limit`, `type`, `subjectType`, `gateId`, `startDate`, `endDate`, `resolved`
   - Returns `{ violations: [...], pagination: {...} }`
@@ -173,22 +177,26 @@ All endpoints follow the API contract structure with `{ status: "success"|"error
   - Returns `{ passId, visitorName, host: {...}, qrCode: { content, imageUrl, imageBase64 }, ... }`
 
 **faceMatchMock.js:**
+
 - `simulateFaceMatch(subjectId, subjectType, faceImage, delay)`: Simulates face matching with configurable delay
 - Returns `{ verified: boolean, confidence: number }` matching API contract format
 - Can simulate violations: `face_verification_mismatch` or `multiple_fail_attempt`
 
 **qrGenerator.js:**
+
 - `generateQRCode(passId, passType)`: Generates QR code content string (e.g., "QR-STU-2024-ABC123XYZ" or "QR-VIS-2026-NEW789XYZ")
 - `generateQRImage(qrContent)`: Creates QR code image using `qrcode.react` library
 - Returns base64 image data matching API contract format
 
 **wsMock.js:**
+
 - Mock WebSocket connection to `/ws/alerts`
 - Simulates real-time violation alerts
 - Sends `violation_alert` messages with format: `{ type: "violation_alert", timestamp, data: { violationId, violationType, severity, gate: {...}, subject: {...}, message } }`
 - Handles heartbeat/pong messages
 
 **mockData.js:**
+
 - Sample students with structure: `{ id, name, photoUrl, department, enrollmentStatus }`
 - Sample staff members: `{ id, name, photoUrl, department, position, employmentStatus }`
 - Sample visitors: `{ id, name, purpose, hostName, hostDepartment, validFrom, validUntil }`
@@ -201,6 +209,7 @@ All endpoints follow the API contract structure with `{ status: "success"|"error
 - Sample employees for host selection: `{ employeeId, name, department, email }`
 
 **constants.js:**
+
 - Violation types: `UNAUTHORIZED_QR_SCAN = "unauthorized_qr_scan"`, `FACE_VERIFICATION_MISMATCH = "face_verification_mismatch"`, `MULTIPLE_FAIL_ATTEMPT = "multiple_fail_attempt"`, `EXPIRED_VISITOR_QR_CODE = "expired_visitor_qr_code"`
 - Subject types: `STUDENT = "student"`, `STAFF = "staff"`, `VISITOR = "visitor"`
 - Severity levels: `LOW = "low"`, `MEDIUM = "medium"`, `HIGH = "high"`, `CRITICAL = "critical"`
@@ -223,6 +232,7 @@ Create AuthContext for mock authentication with JWT token management (login with
 **Details:**
 
 **AuthContext.jsx:**
+
 - Mock authentication state with JWT token management
 - Methods: `login(employeeId, password)`, `logout()`, `isAuthenticated()`, `getCurrentUser()`
 - Stores JWT token and user info (localStorage for "Remember me")
@@ -230,6 +240,7 @@ Create AuthContext for mock authentication with JWT token management (login with
 - Sets Authorization header for authenticated API calls
 
 **AlertContext.jsx:**
+
 - Global alert/violation state for real-time updates
 - Methods: `addViolation()`, `acknowledgeViolation()`, `getViolations()`, `getViolationsByType()`
 - Connects to WebSocket (`wsMock.js`) for real-time violation alerts
@@ -237,7 +248,8 @@ Create AuthContext for mock authentication with JWT token management (login with
 - Used by both portals for alert synchronization
 - Handles violation types: `unauthorized_qr_scan`, `face_verification_mismatch`, `multiple_fail_attempt`, `expired_visitor_qr_code`
 
-**Dependencies:** 
+**Dependencies:**
+
 - mock-services
 
 ---
@@ -252,6 +264,7 @@ Build PoliceDashboard with full-screen scanning interface. Implement QRScanner c
 **Details:**
 
 **PoliceDashboard.jsx:**
+
 - Full-screen interface (no sidebar)
 - Real-time QR scanning area
 - Camera preview for face verification
@@ -272,23 +285,27 @@ Build PoliceDashboard with full-screen scanning interface. Implement QRScanner c
 **Components:**
 
 **QRScanner.jsx:**
+
 - Uses `react-qr-reader` or manual input, calls `POST /api/v1/scan/qr` with `{ qrCode, gateId, scanTimestamp }`
 - Handles response: valid QR → fetch subject info, invalid QR → trigger violation alert
 - For visitors: checks if pass is expired → triggers `expired_visitor_qr_code` violation
 
 **CameraPreview.jsx:**
+
 - Uses `react-webcam`, captures face image on QR scan
 - Calls `POST /api/v1/face/verify` with `{ subjectId, subjectType, faceImage (base64), gateId, scanTimestamp }`
 - Handles response: verified → white screen, mismatch → trigger violation alert
 - Simulates face match with configurable delay (1-2 seconds)
 
 **AlertDisplay.jsx:**
+
 - Full-screen alert modal with violation details matching API contract
 - Displays violation type, severity, gate info, subject info (if available), timestamp
 - Shows captured image if available
 - Auto-dismisses after 5 seconds or manual close
 
 **Dependencies:**
+
 - setup-routing
 - mock-services
 - context-providers
@@ -305,6 +322,7 @@ Build Login page with employeeId and password fields (matching API contract). Ca
 **Details:**
 
 **Login.jsx:**
+
 - Employee ID and password fields (matching API contract)
 - "Remember me" checkbox
 - "Forgot Password?" link
@@ -314,11 +332,13 @@ Build Login page with employeeId and password fields (matching API contract). Ca
 - Redirects to `/admin/dashboard` on success
 
 **LoginForm.jsx:**
+
 - Reusable login form component
 - Form validation
 - Error message display
 
 **Dependencies:**
+
 - setup-routing
 - context-providers
 
@@ -334,6 +354,7 @@ Build Dashboard page with sidebar navigation. Implement MetricCard component (To
 **Details:**
 
 **Dashboard.jsx:**
+
 - Sidebar navigation (Dashboard, Logs, Alerts, Live Scan, Visitor Management)
 - Header with user profile
 - Metric cards: Total Entries, Total Vehicles, Total Visitors (with percentage changes)
@@ -341,11 +362,13 @@ Build Dashboard page with sidebar navigation. Implement MetricCard component (To
 - Quick Actions section
 
 **MetricCard.jsx:**
+
 - Reusable metric card component
 - Displays metric value, percentage change, icon
 - Color-coded for positive/negative changes
 
 **Dependencies:**
+
 - setup-routing
 - mock-services
 
@@ -361,16 +384,19 @@ Build LiveScan page with camera preview and QR scanner. Display face match statu
 **Details:**
 
 **LiveScan.jsx:**
+
 - Left side: Camera preview with face recognition status
 - Right side: Student/Visitor info card with QR code display
 - Shows "Face Matched" with checkmark when successful
 - Displays person details (name, department, ID, status)
 
 **Components:**
+
 - Uses admin `QRScanner` and `CameraPreview` components
 - Integrates with faceMatchMock for simulation
 
 **Dependencies:**
+
 - admin-dashboard
 - mock-services
 
@@ -386,6 +412,7 @@ Build VisitorManagement page with Create Visitor QR form matching API contract (
 **Details:**
 
 **VisitorManagement.jsx:**
+
 - Left card: Create Visitor QR form matching API contract
   - Fields: Visitor Name (required), Visitor Email (optional), Visitor Phone (optional), Purpose (required), Host Employee ID (required, dropdown), Valid From (required, ISO 8601), Valid Until (required, ISO 8601), Allowed Gates (optional, multi-select), Notes (optional)
   - Validation: validFrom must be future/within last hour, validUntil after validFrom, max 24h duration
@@ -398,10 +425,12 @@ Build VisitorManagement page with Create Visitor QR form matching API contract (
   - Fetches visitor passes from mock data
 
 **Components:**
+
 - `VisitorForm.jsx`: Form component with all fields and validation
 - `QRCodeDisplay.jsx`: Component to display QR code with visitor details
 
 **Dependencies:**
+
 - admin-dashboard
 - mock-services
 
@@ -417,6 +446,7 @@ Build ScanLogs page displaying violations from GET /api/v1/violations. Implement
 **Details:**
 
 **ScanLogs.jsx:**
+
 - Filter bar: Search input, Date picker (startDate/endDate), Export Data button
 - Table displays violations from `GET /api/v1/violations` endpoint
 - Columns: Timestamp (occurredAt), Violation Type, Subject Type, Subject Name, Gate, Status (resolved), Actions
@@ -425,10 +455,12 @@ Build ScanLogs page displaying violations from GET /api/v1/violations. Implement
 - Handles `unauthorized_qr_scan` violations (subject: null) appropriately
 
 **Components:**
+
 - `FilterBar.jsx`: Filter component with all filter options
 - `LogsTable.jsx`: Table component with pagination and sorting
 
 **Dependencies:**
+
 - admin-dashboard
 - mock-services
 
@@ -444,6 +476,7 @@ Build Alerts page displaying violations from GET /api/v1/violations. Implement A
 **Details:**
 
 **Alerts.jsx:**
+
 - Security Alerts page title and description
 - Displays violations from `GET /api/v1/violations` endpoint
 - Alert cards displaying violations matching API contract:
@@ -456,10 +489,12 @@ Build Alerts page displaying violations from GET /api/v1/violations. Implement A
 - Real-time updates via WebSocket connection
 
 **Components:**
+
 - `AlertCard.jsx`: Card component displaying violation details
 - Uses `StatusBadge` component for severity and status
 
 **Dependencies:**
+
 - admin-dashboard
 - context-providers
 
@@ -473,6 +508,7 @@ Build Alerts page displaying violations from GET /api/v1/violations. Implement A
 Apply Tailwind CSS styling to match provided images (purple accents, white backgrounds). Add animations and transitions. Ensure responsive design. Add loading states and error handling.
 
 **Details:**
+
 - Use Tailwind CSS (already configured)
 - Color scheme: Purple accents (#9333ea or similar), white backgrounds
 - Responsive design for mobile/tablet
@@ -482,6 +518,7 @@ Apply Tailwind CSS styling to match provided images (purple accents, white backg
 - Add smooth animations and transitions
 
 **Dependencies:**
+
 - police-portal
 - admin-login
 - admin-dashboard
@@ -500,6 +537,7 @@ Apply Tailwind CSS styling to match provided images (purple accents, white backg
 Test all flows end-to-end. Verify mock data displays correctly. Ensure alerts trigger properly in Police Portal. Test visitor QR generation and scanning. Prepare demo scenarios with sample data.
 
 **Details:**
+
 - Test all flows end-to-end
 - Verify mock data displays correctly
 - Ensure alerts trigger properly in Police Portal
@@ -509,6 +547,7 @@ Test all flows end-to-end. Verify mock data displays correctly. Ensure alerts tr
 - Verify responsive design on different screen sizes
 
 **Dependencies:**
+
 - styling-polish
 
 ---
@@ -597,9 +636,223 @@ Test all flows end-to-end. Verify mock data displays correctly. Ensure alerts tr
 - [ ] Task 11: Styling & Polish
 - [ ] Task 12: Testing & Demo Prep
 
+## Migration Guide: Mock APIs → Real APIs
+
+**Yes, integrating real APIs later will be straightforward!** The architecture is designed to make this transition seamless.
+
+### Why It's Easy
+
+1. **Centralized API Layer**: All API calls are in `src/services/apiMock.js` - you only need to update one file
+2. **Consistent Interface**: Mock functions match the real API contract exactly - same function signatures, same response formats
+3. **Abstraction Layer**: Components use contexts/services, not direct API calls - components won't need changes
+4. **Response Format**: Already standardized to match the API contract (`{ status: "success", data: {...} }`)
+
+### Migration Steps
+
+#### Step 1: Create Real API Service
+
+Create `src/services/api.js` (or rename `apiMock.js` to `api.js`):
+
+```javascript
+// src/services/api.js
+import { API_BASE_URL } from "../utils/constants";
+
+// Helper function for API calls
+async function apiCall(endpoint, options = {}) {
+  const token = localStorage.getItem("authToken");
+
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+      ...options.headers,
+    },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "API request failed");
+  }
+
+  return data; // Already in { status: "success", data: {...} } format
+}
+
+// Replace mock functions with real API calls
+export const authAPI = {
+  login: async (employeeId, password) => {
+    return apiCall("/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ employeeId, password }),
+    });
+  },
+
+  getMe: async () => {
+    return apiCall("/auth/me");
+  },
+};
+
+export const scanAPI = {
+  scanQR: async (qrCode, gateId, scanTimestamp) => {
+    return apiCall("/scan/qr", {
+      method: "POST",
+      body: JSON.stringify({ qrCode, gateId, scanTimestamp }),
+    });
+  },
+
+  verifyFace: async (
+    subjectId,
+    subjectType,
+    faceImage,
+    gateId,
+    scanTimestamp
+  ) => {
+    return apiCall("/face/verify", {
+      method: "POST",
+      body: JSON.stringify({
+        subjectId,
+        subjectType,
+        faceImage,
+        gateId,
+        scanTimestamp,
+      }),
+    });
+  },
+};
+
+// ... continue for all endpoints
+```
+
+#### Step 2: Update Imports
+
+In all files that import from `apiMock.js`, change:
+
+```javascript
+// Before
+import { scanQR, verifyFace } from "../services/apiMock";
+
+// After
+import { scanQR, verifyFace } from "../services/api";
+```
+
+#### Step 3: Replace WebSocket Mock
+
+Replace `wsMock.js` with real WebSocket:
+
+```javascript
+// src/services/wsService.js
+import { WS_ALERTS_URL } from "../utils/constants";
+
+class WebSocketService {
+  constructor() {
+    this.ws = null;
+    this.listeners = [];
+  }
+
+  connect() {
+    this.ws = new WebSocket(WS_ALERTS_URL);
+
+    this.ws.onmessage = (event) => {
+      const alert = JSON.parse(event.data);
+      this.listeners.forEach((listener) => listener(alert));
+    };
+
+    this.ws.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
+
+    this.ws.onclose = () => {
+      // Reconnect logic
+      setTimeout(() => this.connect(), 3000);
+    };
+  }
+
+  subscribe(listener) {
+    this.listeners.push(listener);
+  }
+
+  unsubscribe(listener) {
+    this.listeners = this.listeners.filter((l) => l !== listener);
+  }
+}
+
+export default new WebSocketService();
+```
+
+#### Step 4: Update Constants
+
+Update `src/utils/constants.js`:
+
+```javascript
+// Change from localhost to production URL
+export const API_BASE_URL =
+  process.env.REACT_APP_API_URL ||
+  "https://api.campus-security.example.com/api/v1";
+export const WS_ALERTS_URL =
+  process.env.REACT_APP_WS_URL ||
+  "wss://api.campus-security.example.com/ws/alerts";
+```
+
+#### Step 5: Environment Variables
+
+Create `.env` files:
+
+```bash
+# .env.development
+REACT_APP_API_URL=http://localhost:8000/api/v1
+REACT_APP_WS_URL=ws://localhost:8000/ws/alerts
+
+# .env.production
+REACT_APP_API_URL=https://api.campus-security.example.com/api/v1
+REACT_APP_WS_URL=wss://api.campus-security.example.com/ws/alerts
+```
+
+### What Won't Need Changes
+
+✅ **All Components** - They use the same interface  
+✅ **All Pages** - They call the same functions  
+✅ **Context Providers** - Same methods, just different implementation  
+✅ **State Management** - No changes needed  
+✅ **UI/UX** - Completely unchanged
+
+### Migration Checklist
+
+- [ ] Create `src/services/api.js` with real fetch/axios calls
+- [ ] Update all imports from `apiMock` to `api`
+- [ ] Replace `wsMock.js` with real WebSocket service
+- [ ] Update `constants.js` with production URLs
+- [ ] Add environment variables (.env files)
+- [ ] Test authentication flow
+- [ ] Test QR scanning flow
+- [ ] Test face verification flow
+- [ ] Test WebSocket real-time alerts
+- [ ] Remove mock data files (optional, keep for testing)
+
+### Benefits of This Architecture
+
+1. **Separation of Concerns**: API logic is isolated from UI logic
+2. **Easy Testing**: Can switch between mock and real APIs easily
+3. **Development Flexibility**: Use mocks while backend is being developed
+4. **No Component Changes**: UI code remains untouched
+5. **Type Safety**: Same response formats = predictable behavior
+
+### Pro Tips
+
+- **Keep Mock Files**: You can keep `apiMock.js` for testing/development
+- **Feature Flag**: Use environment variable to switch between mock/real:
+  ```javascript
+  const api =
+    process.env.REACT_APP_USE_MOCK === "true"
+      ? require("./apiMock")
+      : require("./api");
+  ```
+- **Error Handling**: Add proper error handling in real API calls
+- **Loading States**: Already implemented, will work with real APIs
+- **Retry Logic**: Add retry logic for failed requests in production
+
 ---
 
 _Document Version: 1.0.0_  
 _Last Updated: January 2026_  
 _Based on API Contract Document v1.1.0_
-
